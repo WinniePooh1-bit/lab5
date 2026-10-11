@@ -6,7 +6,8 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000"
+      "value": "http://localhost:3000",
+      "type": "string"
     }
   ],
   "item": [
@@ -48,7 +49,7 @@
       }
     },
     {
-      "name": "2. Error - Missing Field",
+      "name": "2. Error - Missing Field (Bad Request)",
       "event": [
         {
           "listen": "test",
@@ -256,14 +257,87 @@
       }
     },
     {
-      "name": "8. Additional - Get Registrations",
+      "name": "8. Double Error - Inactive Student & Missing Prereq",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'inactive', coursesTaken: []})}}, function (err, res) {",
+              "    pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: ['CS201']})}}, function (err2, res2) {});",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_INACTIVE_STUDENT', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_INACTIVE_STUDENT'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "9. Double Error - No Course & Missing Prereq",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'active', coursesTaken: []})}}, function (err, res) {});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_NO_COURSE', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_NO_COURSE'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS999\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "10. Task 5 - Public JSONPlaceholder API",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
               "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-              "pm.test('Response is an array', function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.be.an('array'); });"
+              "pm.test('Response is an array', function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.be.an('array'); });",
+              "pm.test('First user name is correct', function () { var jsonData = pm.response.json(); pm.expect(jsonData[0].name).to.eql('Leanne Graham'); });"
             ]
           }
         }
@@ -272,9 +346,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/registrations",
-          "host": ["{{baseUrl}}"],
-          "path": ["registrations"]
+          "raw": "https://jsonplaceholder.typicode.com/users",
+          "host": ["https://jsonplaceholder", "typicode", "com"],
+          "path": ["users"]
         }
       }
     }
