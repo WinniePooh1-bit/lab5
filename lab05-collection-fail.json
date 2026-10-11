@@ -1,0 +1,282 @@
+{
+  "info": {
+    "name": "Lab05 API Test Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Happy Path - Successful Registration",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'active', coursesTaken: ['CS201']})}}, function (err, res) {",
+              "    pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: ['CS201']})}}, function (err2, res2) {});",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is OK', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('OK'); pm.expect(jsonData.registrationID).to.be.a('number'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "2. Error - Missing Field",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400', function () { pm.response.to.have.status(400); });",
+              "pm.test('Result is ERROR_BAD_REQUEST', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_BAD_REQUEST'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "3. Error - No Student",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: ['CS201']})}}, function (err2, res2) {});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_NO_STUDENT', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_NO_STUDENT'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B999999999\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "4. Error - Inactive Student",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'inactive', coursesTaken: []})}}, function (err, res) {",
+              "    pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: []})}}, function (err2, res2) {});",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_INACTIVE_STUDENT', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_INACTIVE_STUDENT'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "5. Error - No Course",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'active', coursesTaken: []})}}, function (err, res) {});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_NO_COURSE', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_NO_COURSE'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS999\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "6. Error - Prerequisites Missing",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'active', coursesTaken: []})}}, function (err, res) {",
+              "    pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: ['CS201']})}}, function (err2, res2) {});",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is ERROR_PREREQUISITES', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('ERROR_PREREQUISITES'); pm.expect(jsonData.missing).to.eql(['CS201']); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "7. Boundary - No Prerequisites",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/students/B231234567', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({status: 'active', coursesTaken: []})}}, function (err, res) {",
+              "    pm.sendRequest({url: pm.collectionVariables.get('baseUrl') + '/courses/CS313', method: 'PUT', header: {'Content-Type': 'application/json'}, body: {mode: 'raw', raw: JSON.stringify({prerequisites: []})}}, function (err2, res2) {});",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () { pm.response.to.have.status(200); });",
+              "pm.test('Result is OK', function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql('OK'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS313\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    },
+    {
+      "name": "8. Additional - Get Registrations",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is an array', function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.be.an('array'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["registrations"]
+        }
+      }
+    }
+  ]
+}
