@@ -1,0 +1,87 @@
+newman
+
+Lab05 API Test Collection
+
+→ 1. Happy Path - Successful Registration
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 24ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+  POST http://localhost:3000/registrations [201 Created, 202B, 2ms]
+  √  Status code is 201
+  √  Result is OK
+
+→ 2. Error - Missing Field (Bad Request)
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 2ms]
+  √  Status code is 400
+  √  Result is ERROR_BAD_REQUEST
+
+→ 3. Error - No Student
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+  POST http://localhost:3000/registrations [200 OK, 192B, 1ms]
+  √  Status code is 200
+  √  Result is ERROR_NO_STUDENT
+
+→ 4. Error - Inactive Student
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 198B, 2ms]
+  √  Status code is 200
+  √  Result is ERROR_INACTIVE_STUDENT
+
+→ 5. Error - No Course
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 2ms]
+  POST http://localhost:3000/registrations [200 OK, 191B, 2ms]
+  √  Status code is 200
+  √  Result is ERROR_NO_COURSE
+
+→ 6. Error - Prerequisites Missing
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
+  √  Status code is 200
+  √  Result is ERROR_PREREQUISITES
+
+→ 7. Boundary - No Prerequisites
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  POST http://localhost:3000/registrations [201 Created, 202B, 1ms]
+  √  Status code is 201
+  √  Result is OK
+
+→ 8. Double Error - Inactive Student & Missing Prereq
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 198B, 1ms]
+  √  Status code is 200
+  √  Result is ERROR_INACTIVE_STUDENT
+
+→ 9. Double Error - No Course & Missing Prereq
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 191B, 2ms]
+  √  Status code is 200
+  √  Result is ERROR_NO_COURSE
+
+→ 10. Task 5 - Public JSONPlaceholder API
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.62kB, 64ms]
+  √  Status code is 200
+  √  Response is an array
+  √  First user name is correct
+
+┌─────────────────────────┬──────────────────┬─────────────────┐
+│                         │         executed │          failed │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│              iterations │                1 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│                requests │               23 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│            test-scripts │               10 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│      prerequest-scripts │                8 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│              assertions │               21 │               0 │
+├─────────────────────────┴──────────────────┴─────────────────┤
+│ total run duration: 920ms                                    │
+├──────────────────────────────────────────────────────────────┤
+│ total data received: 6.15kB (approx)                         │
+├──────────────────────────────────────────────────────────────┤
+│ average response time: 5ms [min: 1ms, max: 64ms, s.d.: 13ms] │
+└──────────────────────────────────────────────────────────────┘
