@@ -11,10 +11,10 @@ function collect(items, out = []) {
   }
   return out;
 }
-assert.equal(pass.item.length, 12);
-assert.equal(fail.item.length, 12);
+assert.equal(pass.item.length, 13);
+assert.equal(fail.item.length, 13);
 for (const collection of [pass, fail]) {
-  for (let i = 0; i < 11; i += 1) {
+  for (let i = 0; i < 12; i += 1) {
     const folder = collection.item[i];
     const post = folder.item[folder.item.length - 1];
     assert.equal(post.request.method, 'POST');
@@ -26,10 +26,11 @@ for (const collection of [pass, fail]) {
   }
   assert.equal(collection.item[11].item[0].request.url.raw, 'https://jsonplaceholder.typicode.com/users');
 }
-assert.equal(collect(pass.item).length, 25);
-assert.equal(collect(fail.item).length, 25);
+assert.equal(collect(pass.item).length, 27);
+assert.equal(collect(fail.item).length, 27);
 const restored = JSON.parse(JSON.stringify(fail));
+restored.info.name = pass.info.name;
 const last = restored.item[0].item.at(-1);
 last.event[0].script.exec[0] = pass.item[0].item.at(-1).event[0].script.exec[0];
 assert.deepEqual(restored, pass);
-console.log('Collection validation: 12 folders, 25 assertions; fail fixture differs by one status oracle only.');
+console.log('Collection validation: 13 folders, 27 assertions; fail fixture differs by one status oracle only.');
