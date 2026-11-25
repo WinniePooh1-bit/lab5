@@ -1,0 +1,58 @@
+name: Lab05 Postman Newman verification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server.js'
+      - 'lab05-collection.json'
+      - 'lab05-collection-fail.json'
+      - 'scripts/**'
+      - '.github/workflows/verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  newman-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Newman
+        run: npm install --global newman@6.2.3
+
+      - name: Run collection validation and PASS / FAIL / DOWN tests
+        run: bash scripts/verify-lab.sh
+
+      - name: Finalize README from actual logs
+        run: python3 scripts/finalize-readme.py
+
+      - name: Commit real execution evidence
+        if: success()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md results/
+          if ! git diff --cached --quiet; then
+            git commit -m "test: record real Newman pass fail and down results"
+            git push origin HEAD:main
+          fi
+
+      - name: Upload logs even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab05-newman-results
+          path: results/
+          if-no-files-found: warn
+          retention-days: 30
