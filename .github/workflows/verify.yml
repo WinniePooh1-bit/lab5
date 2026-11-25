@@ -11,6 +11,10 @@ on:
       - '.github/workflows/verify.yml'
   workflow_dispatch:
 
+concurrency:
+  group: lab05-newman-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -45,6 +49,8 @@ jobs:
           git add README.md results/
           if ! git diff --cached --quiet; then
             git commit -m "test: record real Newman pass fail and down results"
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi
 
