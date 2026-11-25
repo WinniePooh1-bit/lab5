@@ -855,7 +855,54 @@
       ]
     },
     {
-      "name": "11 — Хичээл байхгүй тул урьдач нөхцөлийг шалгах боломжгүй",
+      "name": "11 — Давхар алдаа: оюутан байхгүй + хичээл байхгүй",
+      "item": [
+        {
+          "name": "POST /registrations — шалгах",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentID\": \"B999999998\",\n  \"courseID\": \"CS997\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('result is ERROR_NO_STUDENT', function () { const data = pm.response.json(); pm.expect(data.result).to.eql('ERROR_NO_STUDENT'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "12 — Урьдач нөхцөлийн заримыг хангасан",
       "item": [
         {
           "name": "Setup PUT /students/B231234567",
@@ -867,24 +914,55 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/students/B231234567",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "students",
-                "B231234567"
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"active\",\n  \"coursesTaken\": []\n}",
+              "raw": "{\n  \"status\": \"active\",\n  \"coursesTaken\": [\n    \"CS201\"\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/B231234567",
+              "host": [
+                "{{baseUrl}"
+              ],
+              "path": [
+                "students",
+                "B231234567"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Setup PUT /courses/CS316",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prerequisites\": [\n    \"CS201\",\n    \"CS202\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS316",
+              "host": [
+                "{{baseUrl}"
+              ],
+              "path": [
+                "courses",
+                "CS316"
+              ]
             }
           }
         },
@@ -898,23 +976,23 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/registrations",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "registrations"
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS998\"\n}",
+              "raw": "{\n  \"studentID\": \"B231234567\",\n  \"courseID\": \"CS316\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": [
+                "{{baseUrl}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           },
           "event": [
@@ -924,7 +1002,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('HTTP status is 200', function () { pm.response.to.have.status(200); });",
-                  "pm.test('result is ERROR_NO_COURSE', function () { const data = pm.response.json(); pm.expect(data.result).to.eql('ERROR_NO_COURSE'); });"
+                  "pm.test('partial prerequisite returns CS202 as missing', function () { const data = pm.response.json(); pm.expect(data.result).to.eql('ERROR_PREREQUISITES'); pm.expect(data.missing).to.eql(['CS202']); });"
                 ]
               }
             }
