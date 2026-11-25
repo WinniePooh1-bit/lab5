@@ -1,8 +1,11 @@
+// Lab05 — Хичээлд бүртгүүлэх API (Лекц 5-ын жишээ систем)
+// Ажиллуулах: node server.js   (ямар ч сан суулгах шаардлагагүй)
 const http = require('http');
 
-const students = {};      
-const courses = {};       
-const registrations = []; 
+// In-memory "өгөгдлийн сан"
+const students = {};      // id -> { status, coursesTaken }
+const courses = {};       // id -> { prerequisites }
+const registrations = []; // { registrationID, studentID, courseID }
 
 function send(res, status, obj) {
   res.writeHead(status, { 'Content-Type': 'application/json' });
@@ -19,6 +22,7 @@ const server = http.createServer((req, res) => {
 
     const url = req.url.split('?')[0];
 
+    // Setup endpoints — тестийн Initialization-д ашиглана
     let m;
     if (req.method === 'PUT' && (m = url.match(/^\/students\/([\w-]+)$/))) {
       students[m[1]] = {
@@ -37,6 +41,8 @@ const server = http.createServer((req, res) => {
       return send(res, 200, { courseID: m[1], ...c });
     }
 
+    // Тестлэгдэх гол функц — хичээлд бүртгүүлэх
+    // 201 = амжилттай, 200 + ERROR_* = оролтын алдаа (Лекц 5-ын семантик)
     if (req.method === 'POST' && url === '/registrations') {
       const { studentID, courseID } = data;
       if (!studentID || !courseID)
