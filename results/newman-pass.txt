@@ -4,7 +4,7 @@ Lab05 API Test Collection
 
 ❏ 01 — Амжилттай бүртгэл (Happy Path)
 ↳ Setup PUT /students/B231234567
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 22ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 23ms]
 
 ↳ Setup PUT /courses/CS313
   PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 3ms]
@@ -22,13 +22,13 @@ Lab05 API Test Collection
 
 ❏ 03 — courseID талбар дутуу
 ↳ POST /registrations — шалгах
-  POST http://localhost:3000/registrations [400 Bad Request, 202B, 3ms]
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 2ms]
   ✓  HTTP status is 400
   ✓  result is ERROR_BAD_REQUEST
 
 ❏ 04 — JSON формат буруу
 ↳ POST /registrations — шалгах
-  POST http://localhost:3000/registrations [400 Bad Request, 199B, 2ms]
+  POST http://localhost:3000/registrations [400 Bad Request, 199B, 1ms]
   ✓  HTTP status is 400
   ✓  result is ERROR_BAD_JSON
 
@@ -46,16 +46,16 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 3ms]
 
 ↳ Setup PUT /courses/CS313
-  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
 
 ↳ POST /registrations — шалгах
-  POST http://localhost:3000/registrations [200 OK, 198B, 2ms]
+  POST http://localhost:3000/registrations [200 OK, 198B, 1ms]
   ✓  HTTP status is 200
   ✓  result is ERROR_INACTIVE_STUDENT
 
 ❏ 07 — Хичээл байхгүй
 ↳ Setup PUT /students/B231234567
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [200 OK, 191B, 1ms]
@@ -67,19 +67,19 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
 
 ↳ Setup PUT /courses/CS313
-  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
 
 ↳ POST /registrations — шалгах
-  POST http://localhost:3000/registrations [200 OK, 215B, 2ms]
+  POST http://localhost:3000/registrations [200 OK, 215B, 4ms]
   ✓  HTTP status is 200
   ✓  result is ERROR_PREREQUISITES
 
 ❏ 09 — Урьдач нөхцөлгүй хичээл
 ↳ Setup PUT /students/B231234567
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 2ms]
 
 ↳ Setup PUT /courses/CS314
-  PUT http://localhost:3000/courses/CS314 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS314 [200 OK, 178B, 2ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [201 Created, 202B, 1ms]
@@ -109,7 +109,7 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
 
 ↳ Setup PUT /courses/CS316
-  PUT http://localhost:3000/courses/CS316 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/courses/CS316 [200 OK, 178B, 0µs]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
@@ -118,29 +118,29 @@ Lab05 API Test Collection
 
 ❏ 12 — Нийтийн API: JSONPlaceholder users
 ↳ GET https://jsonplaceholder.typicode.com/users
-  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.59kB, 98ms]
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.61kB, 110ms]
   ✓  HTTP status is 200
   ✓  response is an array
   ✓  first user is Leanne Graham
 
-┌─────────────────────────┬──────────────────┬─────────────────┐
-│                         │         executed │          failed │
-├─────────────────────────┼──────────────────┼─────────────────┤
-│              iterations │                1 │               0 │
-├─────────────────────────┼──────────────────┼─────────────────┤
-│                requests │               27 │               0 │
-├─────────────────────────┼──────────────────┼─────────────────┤
-│            test-scripts │               13 │               0 │
-├─────────────────────────┼──────────────────┼─────────────────┤
-│      prerequest-scripts │                0 │               0 │
-├─────────────────────────┼──────────────────┼─────────────────┤
-│              assertions │               27 │               0 │
-├─────────────────────────┴──────────────────┴─────────────────┤
-│ total run duration: 440ms                                    │
-├──────────────────────────────────────────────────────────────┤
-│ total data received: 6.27kB (approx)                         │
-├──────────────────────────────────────────────────────────────┤
-│ average response time: 5ms [min: 1ms, max: 98ms, s.d.: 18ms] │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │               27 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │               13 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                0 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │               27 │                0 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 460ms                                     │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 6.27kB (approx)                          │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 6ms [min: 1ms, max: 110ms, s.d.: 20ms] │
+└───────────────────────────────────────────────────────────────┘
 
 exit_code=0
