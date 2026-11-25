@@ -63,13 +63,13 @@ run_newman() {
   fi
 }
 
-# PASS: all 25 assertions must succeed.
+# PASS: all 27 assertions must succeed.
 run_newman "lab05-collection.json" "results/newman-pass.txt" 0
-grep -Eq 'assertions[[:space:]]*[│|][[:space:]]*25[[:space:]]*[│|][[:space:]]*0' results/newman-pass.txt
+grep -Eq 'assertions[[:space:]]*[│|][[:space:]]*27[[:space:]]*[│|][[:space:]]*0' results/newman-pass.txt
 
 # FAIL: only the first successful registration's status-code oracle is intentionally wrong.
 run_newman "lab05-collection-fail.json" "results/newman-fail.txt" 1
-grep -Eq 'assertions[[:space:]]*[│|][[:space:]]*25[[:space:]]*[│|][[:space:]]*1' results/newman-fail.txt
+grep -Eq 'assertions[[:space:]]*[│|][[:space:]]*27[[:space:]]*[│|][[:space:]]*1' results/newman-fail.txt
 
 # DOWN: stop the API and prove connection refusal is a transport/interface failure.
 stop_server
