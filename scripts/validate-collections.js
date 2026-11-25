@@ -24,7 +24,7 @@ for (const collection of [pass, fail]) {
       assert.ok(setup.request.url.raw.startsWith('{{baseUrl}}/'));
     }
   }
-  assert.equal(collection.item[11].item[0].request.url.raw, 'https://jsonplaceholder.typicode.com/users');
+  assert.equal(collection.item[12].item[0].request.url.raw, 'https://jsonplaceholder.typicode.com/users');
 }
 assert.equal(collect(pass.item).length, 27);
 assert.equal(collect(fail.item).length, 27);
