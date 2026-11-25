@@ -1,0 +1,3 @@
+PASS exit_code=0
+FAIL exit_code=1
+DOWN exit_code=1

@@ -14,7 +14,17 @@
 
 <!-- ENV-RESULTS-START -->
 
-CI ажиллуулалтын бодит хувилбарууд тест амжилттай дууссаны дараа энд автоматаар нэмэгдэнэ. Урьдчилан таамагласан хувилбар оруулаагүй.
+### node -v
+
+```text
+v22.23.5
+```
+
+### newman -v
+
+```text
+6.2.3
+```
 
 <!-- ENV-RESULTS-END -->
 
@@ -82,7 +92,13 @@ CI ажиллуулалтын бодит хувилбарууд тест амж�
 
 <!-- RUN-RESULTS-START -->
 
-CI-ээр Newman бодитоор ажиллуулсны дараах assertions болон exit code-ийн тоонууд энд автоматаар орно.
+| Ажиллуулалт | Assertions executed | Failed | Newman exit code | Нотолгоо |
+|---|---:|---:|---:|---|
+| PASS | 27 | 0 | 0 | results/newman-pass.txt |
+| FAIL (зориудын буруу oracle) | 27 | 1 | 1 | results/newman-fail.txt |
+| DOWN (сервер унтарсан) | 27 | 24 | 1 | results/newman-down.txt |
+
+PASS үед бүх assertion амжилттай; FAIL үед яг нэг HTTP status oracle унасан; DOWN үед ECONNREFUSED гарсан. Newman-ийн бүрэн CLI гаралт болон exit code мөр тус бүрийн results/ файлуудад хадгалагдсан.
 
 <!-- RUN-RESULTS-END -->
 
