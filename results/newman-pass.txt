@@ -4,7 +4,7 @@ Lab05 API Test Collection
 
 ❏ 01 — Амжилттай бүртгэл (Happy Path)
 ↳ Setup PUT /students/B231234567
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 23ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 22ms]
 
 ↳ Setup PUT /courses/CS313
   PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 3ms]
@@ -28,7 +28,7 @@ Lab05 API Test Collection
 
 ❏ 04 — JSON формат буруу
 ↳ POST /registrations — шалгах
-  POST http://localhost:3000/registrations [400 Bad Request, 199B, 1ms]
+  POST http://localhost:3000/registrations [400 Bad Request, 199B, 2ms]
   ✓  HTTP status is 400
   ✓  result is ERROR_BAD_JSON
 
@@ -46,7 +46,7 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 3ms]
 
 ↳ Setup PUT /courses/CS313
-  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [200 OK, 198B, 1ms]
@@ -67,7 +67,7 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
 
 ↳ Setup PUT /courses/CS313
-  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [200 OK, 215B, 4ms]
@@ -76,10 +76,10 @@ Lab05 API Test Collection
 
 ❏ 09 — Урьдач нөхцөлгүй хичээл
 ↳ Setup PUT /students/B231234567
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 3ms]
 
 ↳ Setup PUT /courses/CS314
-  PUT http://localhost:3000/courses/CS314 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/courses/CS314 [200 OK, 178B, 1ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [201 Created, 202B, 1ms]
@@ -109,16 +109,16 @@ Lab05 API Test Collection
   PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 1ms]
 
 ↳ Setup PUT /courses/CS316
-  PUT http://localhost:3000/courses/CS316 [200 OK, 178B, 0µs]
+  PUT http://localhost:3000/courses/CS316 [200 OK, 178B, 1ms]
 
 ↳ POST /registrations — шалгах
   POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
   ✓  HTTP status is 200
   ✓  partial prerequisite returns CS202 as missing
 
-❏ 12 — Нийтийн API: JSONPlaceholder users
+❏ 13 — Нийтийн API: JSONPlaceholder users
 ↳ GET https://jsonplaceholder.typicode.com/users
-  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.61kB, 110ms]
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.6kB, 122ms]
   ✓  HTTP status is 200
   ✓  response is an array
   ✓  first user is Leanne Graham
@@ -136,11 +136,11 @@ Lab05 API Test Collection
 ├─────────────────────────┼──────────────────┼──────────────────┤
 │              assertions │               27 │                0 │
 ├─────────────────────────┴──────────────────┴──────────────────┤
-│ total run duration: 460ms                                     │
+│ total run duration: 476ms                                     │
 ├───────────────────────────────────────────────────────────────┤
 │ total data received: 6.27kB (approx)                          │
 ├───────────────────────────────────────────────────────────────┤
-│ average response time: 6ms [min: 1ms, max: 110ms, s.d.: 20ms] │
+│ average response time: 6ms [min: 1ms, max: 122ms, s.d.: 22ms] │
 └───────────────────────────────────────────────────────────────┘
 
 exit_code=0
