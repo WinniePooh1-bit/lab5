@@ -926,7 +926,7 @@
             "url": {
               "raw": "{{baseUrl}}/students/B231234567",
               "host": [
-                "{{baseUrl}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "students",
@@ -957,7 +957,7 @@
             "url": {
               "raw": "{{baseUrl}}/courses/CS316",
               "host": [
-                "{{baseUrl}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "courses",
@@ -988,7 +988,7 @@
             "url": {
               "raw": "{{baseUrl}}/registrations",
               "host": [
-                "{{baseUrl}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "registrations"
