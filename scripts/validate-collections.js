@@ -11,6 +11,8 @@ function collect(items, out = []) {
   }
   return out;
 }
+assert.deepEqual(pass.variable, [{ key: 'baseUrl', value: 'http://localhost:3000', type: 'string' }]);
+assert.deepEqual(fail.variable, pass.variable);
 assert.equal(pass.item.length, 13);
 assert.equal(fail.item.length, 13);
 for (const collection of [pass, fail]) {
